@@ -1,0 +1,46 @@
+{
+  "info": {
+    "name": "CYBEV API",
+    "_postman_id": "1e87d79c-63be-4dc3-b6b0-000000000000",
+    "description": "CYBEV Authentication API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Register",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"username\":\"demo\",\"email\":\"demo@cybev.io\",\"password\":\"demo123\"}"
+        },
+        "url": {
+          "raw": "http://localhost:5000/api/auth/register",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["api", "auth", "register"]
+        }
+      }
+    },
+    {
+      "name": "Login",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"email\":\"demo@cybev.io\",\"password\":\"demo123\"}"
+        },
+        "url": {
+          "raw": "http://localhost:5000/api/auth/login",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["api", "auth", "login"]
+        }
+      }
+    }
+  ]
+}
