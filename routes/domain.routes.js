@@ -9,7 +9,6 @@ router.get('/check-domain', async (req, res) => {
     return res.status(400).json({ message: 'Domain required' });
   }
 
-  // Simulate a 50/50 chance of availability
   const isAvailable = Math.random() > 0.5;
   res.json({
     domain,
