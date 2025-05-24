@@ -1,23 +1,10 @@
-
 const Blog = require('../models/blog.model');
 
-exports.createBlog = async (req, res) => {
+exports.deleteBlog = async (req, res) => {
   try {
-    const blog = await Blog.create({
-      ...req.body,
-      userId: req.userId
-    });
-    res.status(201).json(blog);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-};
-
-exports.getBlogBySubdomain = async (req, res) => {
-  try {
-    const blog = await Blog.findOne({ domainValue: req.params.subdomain });
-    if (!blog) return res.status(404).json({ message: 'Blog not found' });
-    res.json(blog);
+    const blog = await Blog.findOneAndDelete({ _id: req.params.id, userId: req.userId });
+    if (!blog) return res.status(404).json({ message: 'Blog not found or unauthorized' });
+    res.json({ message: 'Blog deleted successfully' });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
