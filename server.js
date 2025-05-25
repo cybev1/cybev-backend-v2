@@ -21,6 +21,9 @@ app.use('/api', stakeRoutes);
 const leaderboardRoutes = require('./routes/leaderboard.routes');
 app.use('/api', leaderboardRoutes);
 
+const authRoutes = require('./routes/auth.routes');
+app.use('/api/auth', authRoutes);
+
 // ✅ Route Registration
 app.use('/api/auth', authRoutes);
 app.use('/api/posts', postRoutes);
