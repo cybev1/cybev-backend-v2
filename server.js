@@ -15,6 +15,8 @@ app.use('/api', userBlogsRoutes);
 const commentRoutes = require('./routes/comment.routes');
 app.use('/api', commentRoutes);
 
+const stakeRoutes = require('./routes/stake.routes');
+app.use('/api', stakeRoutes);
 
 // ✅ Route Registration
 app.use('/api/auth', authRoutes);
