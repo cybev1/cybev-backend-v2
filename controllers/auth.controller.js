@@ -3,32 +3,30 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 exports.register = async (req, res) => {
-  const { username, email, password } = req.body;
   try {
-    const existingUser = await User.findOne({ email });
-    if (existingUser) return res.status(400).json({ message: 'User already exists' });
+    const { username, email, password, ref } = req.body;
 
-    const hashedPassword = await bcrypt.hash(password, 12);
-    const user = await User.create({ username, email, password: hashedPassword });
+    const existingUser = await User.findOne({ $or: [{ email }, { username }] });
+    if (existingUser) return res.status(400).json({ message: 'Email or username already exists' });
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
-    res.status(201).json({ user, token });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-};
+    const hashedPassword = await bcrypt.hash(password, 10);
+    let referrerId = null;
 
-exports.login = async (req, res) => {
-  const { email, password } = req.body;
-  try {
-    const user = await User.findOne({ email });
-    if (!user) return res.status(404).json({ message: 'User not found' });
+    if (ref) {
+      const refUser = await User.findOne({ username: ref });
+      if (refUser) referrerId = refUser._id;
+    }
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
+    const newUser = await User.create({
+      username,
+      email,
+      password: hashedPassword,
+      referrer: referrerId
+    });
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
-    res.json({ user, token });
+    const token = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET || 'cybev', { expiresIn: '7d' });
+
+    res.status(201).json({ token, user: { username: newUser.username, email: newUser.email } });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
