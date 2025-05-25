@@ -2,7 +2,6 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 
-const authRoutes = require('./routes/auth.routes');
 const postRoutes = require('./routes/post.routes');
 const domainRoutes = require('./routes/domain.routes'); // ✅ Added domain route
 
