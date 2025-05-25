@@ -1,0 +1,16 @@
+// Inside registration logic:
+const refUsername = req.query.ref || req.body.ref;
+let referrerId = null;
+if (refUsername) {
+  const refUser = await User.findOne({ username: refUsername });
+  if (refUser) {
+    referrerId = refUser._id;
+  }
+}
+
+const newUser = await User.create({
+  username,
+  email,
+  password: hashedPassword,
+  referrer: referrerId
+});
