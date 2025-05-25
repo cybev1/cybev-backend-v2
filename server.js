@@ -12,6 +12,9 @@ app.use(express.json());
 const userBlogsRoutes = require('./routes/userblogs.routes');
 app.use('/api', userBlogsRoutes);
 
+const commentRoutes = require('./routes/comment.routes');
+app.use('/api', commentRoutes);
+
 
 // ✅ Route Registration
 app.use('/api/auth', authRoutes);
