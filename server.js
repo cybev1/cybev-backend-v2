@@ -9,6 +9,10 @@ const domainRoutes = require('./routes/domain.routes'); // ✅ Added domain rout
 const app = express();
 app.use(express.json());
 
+const userBlogsRoutes = require('./routes/userblogs.routes');
+app.use('/api', userBlogsRoutes);
+
+
 // ✅ Route Registration
 app.use('/api/auth', authRoutes);
 app.use('/api/posts', postRoutes);
