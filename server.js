@@ -10,6 +10,7 @@ const commentRoutes = require('./routes/comment.routes');
 const stakeRoutes = require('./routes/stake.routes');
 const leaderboardRoutes = require('./routes/leaderboard.routes');
 const authRoutes = require('./routes/auth.routes');
+const loginRoutes = require('./routes/login.routes');
 
 const app = express();
 
@@ -29,6 +30,7 @@ app.use('/api', commentRoutes);
 app.use('/api', stakeRoutes);
 app.use('/api', leaderboardRoutes);
 app.use('/api', domainRoutes);
+app.use('/api', loginRoutes);
 
 // ✅ MongoDB connection
 mongoose.connect(process.env.MONGO_URI)
