@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors'); // ✅ NEW LINE
 
 const postRoutes = require('./routes/post.routes');
 const domainRoutes = require('./routes/domain.routes');
@@ -11,6 +12,13 @@ const leaderboardRoutes = require('./routes/leaderboard.routes');
 const authRoutes = require('./routes/auth.routes');
 
 const app = express();
+
+// ✅ ADD CORS BEFORE ANY ROUTES
+app.use(cors({
+  origin: 'https://app.cybev.io',
+  credentials: true
+}));
+
 app.use(express.json());
 
 // ✅ Route Registration
