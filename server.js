@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
-const cors = require('cors'); // ✅ NEW LINE
+const cors = require('cors');
 
 const postRoutes = require('./routes/post.routes');
 const domainRoutes = require('./routes/domain.routes');
@@ -11,10 +11,11 @@ const stakeRoutes = require('./routes/stake.routes');
 const leaderboardRoutes = require('./routes/leaderboard.routes');
 const authRoutes = require('./routes/auth.routes');
 const loginRoutes = require('./routes/login.routes');
+const meRoutes = require('./routes/me.routes'); // ✅ NEW
 
 const app = express();
 
-// ✅ ADD CORS BEFORE ANY ROUTES
+// ✅ CORS Configuration
 app.use(cors({
   origin: 'https://app.cybev.io',
   credentials: true
@@ -24,15 +25,16 @@ app.use(express.json());
 
 // ✅ Route Registration
 app.use('/api/auth', authRoutes);
+app.use('/api', loginRoutes);        // includes /auth/login
+app.use('/api', meRoutes);           // ✅ NEW: /auth/me
 app.use('/api/posts', postRoutes);
 app.use('/api', userBlogsRoutes);
 app.use('/api', commentRoutes);
 app.use('/api', stakeRoutes);
 app.use('/api', leaderboardRoutes);
 app.use('/api', domainRoutes);
-app.use('/api', loginRoutes);
 
-// ✅ MongoDB connection
+// ✅ MongoDB Connection
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
     console.log('MongoDB connected');
