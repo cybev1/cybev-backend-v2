@@ -24,7 +24,6 @@ const authRoutes = require('./routes/auth.routes');
 app.use('/api/auth', authRoutes);
 
 // ✅ Route Registration
-app.use('/api/auth', authRoutes);
 app.use('/api/posts', postRoutes);
 app.use('/api', domainRoutes); // ✅ Domain check = /api/check-domain
 
