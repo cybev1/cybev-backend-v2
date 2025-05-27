@@ -1,4 +1,5 @@
 const Stake = require('../models/stake.model');
+const BadgeMint = require('../models/badgeMint.model');
 
 function getTier(staked) {
   if (staked >= 1000) return '💎 Diamond';
@@ -8,7 +9,7 @@ function getTier(staked) {
 }
 
 function getImageUrl(tier) {
-  const name = tier.replace(/[^a-zA-Z]/g, '').toLowerCase(); // bronze, silver, etc.
+  const name = tier.replace(/[^a-zA-Z]/g, '').toLowerCase();
   return `https://cdn.cybev.io/badges/${name}.png`;
 }
 
@@ -18,8 +19,13 @@ exports.mintBadge = async (req, res) => {
     const total = stakes.reduce((sum, s) => sum + s.amount, 0);
     const tier = getTier(total);
 
+    const alreadyMinted = await BadgeMint.findOne({ userId: req.userId, tier });
+    if (alreadyMinted) return res.status(409).json({ message: 'Badge already minted' });
+
+    await BadgeMint.create({ userId: req.userId, tier });
+
     res.status(200).json({
-      message: 'Badge minted successfully (mock)',
+      message: 'Badge minted successfully',
       tier,
       metadata: {
         title: `${tier} Tier Badge`,
