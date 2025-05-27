@@ -7,6 +7,11 @@ function getTier(staked) {
   return '🥉 Bronze';
 }
 
+function getImageUrl(tier) {
+  const name = tier.replace(/[^a-zA-Z]/g, '').toLowerCase(); // bronze, silver, etc.
+  return `https://cdn.cybev.io/badges/${name}.png`;
+}
+
 exports.mintBadge = async (req, res) => {
   try {
     const stakes = await Stake.find({ userId: req.userId });
@@ -19,7 +24,7 @@ exports.mintBadge = async (req, res) => {
       metadata: {
         title: `${tier} Tier Badge`,
         description: `Awarded for staking ₡${total} on CYBEV`,
-        image: `/badges/${tier.replace(/[^a-zA-Z]/g, '').toLowerCase()}.png`
+        image: getImageUrl(tier)
       }
     });
   } catch (err) {
