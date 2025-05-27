@@ -13,7 +13,8 @@ const authRoutes = require('./routes/auth.routes');
 const loginRoutes = require('./routes/login.routes');
 const meRoutes = require('./routes/me.routes');
 const mintRoutes = require('./routes/mint.routes');
-const tierBadgeRoutes = require('./routes/tierbadge.routes'); // ✅ NEW
+const tierBadgeRoutes = require('./routes/tierbadge.routes');
+const tierHistoryRoutes = require('./routes/tierhistory.routes'); // ✅ NEW
 
 const app = express();
 
@@ -30,7 +31,8 @@ app.use('/api/auth', authRoutes);
 app.use('/api', loginRoutes);           // /auth/login
 app.use('/api', meRoutes);              // /auth/me
 app.use('/api', mintRoutes);            // /posts/:id/mint
-app.use('/api', tierBadgeRoutes);       // ✅ /tier/mint-badge
+app.use('/api', tierBadgeRoutes);       // /tier/mint-badge
+app.use('/api', tierHistoryRoutes);     // ✅ /tier/history
 app.use('/api/posts', postRoutes);
 app.use('/api', userBlogsRoutes);
 app.use('/api', commentRoutes);
