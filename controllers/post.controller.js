@@ -1,16 +1,31 @@
 const Post = require('../models/post.model');
 
+// Create new post with extended options
 exports.createPost = async (req, res) => {
-  const { title, category, content } = req.body;
   try {
-    const post = await Post.create({
+    const { title, content, seo, category, niche, tags, status, schedule, boost, pin, mint, share } = req.body;
+    const userId = req.user?.id;
+
+    const newPost = new Post({
       title,
-      category,
       content,
-      userId: req.userId // Automatically from auth middleware
+      seo,
+      category,
+      niche,
+      tags: tags.split(',').map(tag => tag.trim()),
+      status,
+      schedule,
+      boost,
+      pin,
+      isMinted: mint,
+      userId,
+      sharedToTimeline: share
     });
-    res.status(201).json(post);
+
+    await newPost.save();
+    res.status(201).json({ message: 'Post created successfully', post: newPost });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error('❌ Failed to create post:', err);
+    res.status(500).json({ message: 'Server error', error: err.message });
   }
 };
