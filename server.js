@@ -14,7 +14,8 @@ const loginRoutes = require('./routes/login.routes');
 const meRoutes = require('./routes/me.routes');
 const mintRoutes = require('./routes/mint.routes');
 const tierBadgeRoutes = require('./routes/tierbadge.routes');
-const tierHistoryRoutes = require('./routes/tierhistory.routes'); // ✅ NEW
+const tierHistoryRoutes = require('./routes/tierhistory.routes');
+const aiRoutes = require('./routes/ai.routes'); // ✅ AI Generator Route
 
 const app = express();
 
@@ -28,11 +29,12 @@ app.use(express.json());
 
 // ✅ Route Registration
 app.use('/api/auth', authRoutes);
-app.use('/api', loginRoutes);           // /auth/login
-app.use('/api', meRoutes);              // /auth/me
-app.use('/api', mintRoutes);            // /posts/:id/mint
-app.use('/api', tierBadgeRoutes);       // /tier/mint-badge
-app.use('/api', tierHistoryRoutes);     // ✅ /tier/history
+app.use('/api', loginRoutes);             // /auth/login
+app.use('/api', meRoutes);                // /auth/me
+app.use('/api', mintRoutes);              // /posts/:id/mint
+app.use('/api', tierBadgeRoutes);         // /tier/mint-badge
+app.use('/api', tierHistoryRoutes);       // /tier/history
+app.use('/api', aiRoutes);                // ✅ /ai/generate-post
 app.use('/api/posts', postRoutes);
 app.use('/api', userBlogsRoutes);
 app.use('/api', commentRoutes);
