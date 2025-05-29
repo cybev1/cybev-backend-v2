@@ -1,24 +1,23 @@
-
 const mongoose = require('mongoose');
 
 const postSchema = new mongoose.Schema({
   title: { type: String, required: true },
-  category: { type: String },
-  niche: { type: String },
-  tag: { type: String },
   content: { type: String, required: true },
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-  featuredImage: { type: String },
-  videoUrl: { type: String },
+  category: String,
+  niche: String,
+  tags: [String],
+  image: String,
+  video: String,
+  status: { type: String, enum: ['draft', 'published', 'scheduled'], default: 'draft' },
+  scheduledDate: Date,
+  isMinted: { type: Boolean, default: false },
+  isPinned: { type: Boolean, default: false },
+  isBoosted: { type: Boolean, default: false },
+  shareToTimeline: { type: Boolean, default: false },
   views: { type: Number, default: 0 },
   likes: { type: Number, default: 0 },
   comments: { type: Number, default: 0 },
-  isMinted: { type: Boolean, default: false },
-  isBoosted: { type: Boolean, default: false },
-  isPinned: { type: Boolean, default: false },
-  isShared: { type: Boolean, default: false },
-  isDraft: { type: Boolean, default: false },
-  scheduledAt: { type: Date, default: null }
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Post', postSchema);
