@@ -3,39 +3,36 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 
+const app = express();
+
+// ✅ Middleware
+app.use(cors({
+  origin: 'https://app.cybev.io', // frontend domain
+  credentials: true
+}));
+app.use(express.json());
+
 // ✅ Route Imports
+const authRoutes = require('./routes/auth.routes'); // Register/Login
+const onboardingRoutes = require('./routes/onboarding.routes'); // Onboarding
+const meRoutes = require('./routes/me.routes'); // 🔍 Get logged-in user
+const loginRoutes = require('./routes/login.routes'); // Legacy
 const postRoutes = require('./routes/post.routes');
 const domainRoutes = require('./routes/domain.routes');
 const userBlogsRoutes = require('./routes/userblogs.routes');
 const commentRoutes = require('./routes/comment.routes');
 const stakeRoutes = require('./routes/stake.routes');
 const leaderboardRoutes = require('./routes/leaderboard.routes');
-const authRoutes = require('./routes/auth.routes'); // ✅ Unified Register/Login (NEW)
-const onboardingRoutes = require('./routes/onboarding.routes'); // ✅ NEW: Onboarding route
-const loginRoutes = require('./routes/login.routes'); // Legacy or separate login
-const meRoutes = require('./routes/me.routes');
 const mintRoutes = require('./routes/mint.routes');
 const tierBadgeRoutes = require('./routes/tierbadge.routes');
 const tierHistoryRoutes = require('./routes/tierhistory.routes');
-const aiRoutes = require('./routes/ai.routes'); // ✅ AI Generator Route
+const aiRoutes = require('./routes/ai.routes'); // AI content generation
 
-const app = express();
-
-// 🔐 CORS for frontend access
-app.use(cors({
-  origin: 'https://app.cybev.io', // update to your frontend domain
-  credentials: true
-}));
-
-app.use(express.json());
-
-// ✅ Auth Routes
-app.use('/api/auth', authRoutes);          // Register/Login
-app.use('/api', onboardingRoutes);         // Onboarding wizard data save
-
-// ✅ Other API Routes
-app.use('/api', loginRoutes);
-app.use('/api', meRoutes);
+// ✅ Route Bindings
+app.use('/api/auth', authRoutes);             // Registration/Login
+app.use('/api', onboardingRoutes);            // Onboarding setup
+app.use('/api', meRoutes);                    // ✅ User dashboard profile
+app.use('/api', loginRoutes);                 // Legacy auth
 app.use('/api', mintRoutes);
 app.use('/api', tierBadgeRoutes);
 app.use('/api', tierHistoryRoutes);
@@ -51,6 +48,8 @@ app.use('/api', domainRoutes);
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
     console.log('MongoDB connected');
-    app.listen(process.env.PORT || 5000, () => console.log('Server running'));
+    app.listen(process.env.PORT || 5000, () => {
+      console.log('Server running');
+    });
   })
   .catch(err => console.error('MongoDB connection error:', err));
