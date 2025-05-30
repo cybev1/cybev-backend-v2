@@ -28,13 +28,14 @@ const tierBadgeRoutes = require('./routes/tierbadge.routes');
 const tierHistoryRoutes = require('./routes/tierhistory.routes');
 const aiRoutes = require('./routes/ai.routes');             // AI content generation
 const adsRoutes = require('./routes/ads.routes');           // Ads Manager
-const nftRoutes = require('./routes/nft.routes');           // ✅ NFT Minting
+const nftRoutes = require('./routes/nft.routes');           // NFT Minting
+const walletRoutes = require('./routes/wallet.routes');     // ✅ Wallet Manager
 
 // ✅ Route Bindings
-app.use('/api/auth', authRoutes);             // Registration/Login
-app.use('/api', onboardingRoutes);            // Onboarding setup
-app.use('/api', meRoutes);                    // User dashboard profile
-app.use('/api', loginRoutes);                 // Legacy auth
+app.use('/api/auth', authRoutes);
+app.use('/api', onboardingRoutes);
+app.use('/api', meRoutes);
+app.use('/api', loginRoutes);
 app.use('/api', mintRoutes);
 app.use('/api', tierBadgeRoutes);
 app.use('/api', tierHistoryRoutes);
@@ -45,8 +46,9 @@ app.use('/api', commentRoutes);
 app.use('/api', stakeRoutes);
 app.use('/api', leaderboardRoutes);
 app.use('/api', domainRoutes);
-app.use('/api/ads', adsRoutes);               // Ads route
-app.use('/api/nft', nftRoutes);               // ✅ NFT route
+app.use('/api/ads', adsRoutes);
+app.use('/api/nft', nftRoutes);
+app.use('/api/wallet', walletRoutes); // ✅ Wallet route
 
 // ✅ MongoDB Connection
 mongoose.connect(process.env.MONGO_URI)
