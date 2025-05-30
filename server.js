@@ -13,10 +13,10 @@ app.use(cors({
 app.use(express.json());
 
 // ✅ Route Imports
-const authRoutes = require('./routes/auth.routes'); // Register/Login
+const authRoutes = require('./routes/auth.routes');         // Register/Login
 const onboardingRoutes = require('./routes/onboarding.routes'); // Onboarding
-const meRoutes = require('./routes/me.routes'); // Get logged-in user
-const loginRoutes = require('./routes/login.routes'); // Legacy
+const meRoutes = require('./routes/me.routes');             // Get logged-in user
+const loginRoutes = require('./routes/login.routes');       // Legacy
 const postRoutes = require('./routes/post.routes');
 const domainRoutes = require('./routes/domain.routes');
 const userBlogsRoutes = require('./routes/userblogs.routes');
@@ -26,8 +26,9 @@ const leaderboardRoutes = require('./routes/leaderboard.routes');
 const mintRoutes = require('./routes/mint.routes');
 const tierBadgeRoutes = require('./routes/tierbadge.routes');
 const tierHistoryRoutes = require('./routes/tierhistory.routes');
-const aiRoutes = require('./routes/ai.routes'); // AI content generation
-const adsRoutes = require('./routes/ads.routes'); // ✅ Ads Manager
+const aiRoutes = require('./routes/ai.routes');             // AI content generation
+const adsRoutes = require('./routes/ads.routes');           // Ads Manager
+const nftRoutes = require('./routes/nft.routes');           // ✅ NFT Minting
 
 // ✅ Route Bindings
 app.use('/api/auth', authRoutes);             // Registration/Login
@@ -44,7 +45,8 @@ app.use('/api', commentRoutes);
 app.use('/api', stakeRoutes);
 app.use('/api', leaderboardRoutes);
 app.use('/api', domainRoutes);
-app.use('/api/ads', adsRoutes);               // ✅ Ads route
+app.use('/api/ads', adsRoutes);               // Ads route
+app.use('/api/nft', nftRoutes);               // ✅ NFT route
 
 // ✅ MongoDB Connection
 mongoose.connect(process.env.MONGO_URI)
