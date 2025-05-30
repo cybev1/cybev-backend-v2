@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 
+// ✅ Route Imports
 const postRoutes = require('./routes/post.routes');
 const domainRoutes = require('./routes/domain.routes');
 const userBlogsRoutes = require('./routes/userblogs.routes');
@@ -10,6 +11,7 @@ const commentRoutes = require('./routes/comment.routes');
 const stakeRoutes = require('./routes/stake.routes');
 const leaderboardRoutes = require('./routes/leaderboard.routes');
 const authRoutes = require('./routes/auth.routes'); // ✅ Unified Register/Login (NEW)
+const onboardingRoutes = require('./routes/onboarding.routes'); // ✅ NEW: Onboarding route
 const loginRoutes = require('./routes/login.routes'); // Legacy or separate login
 const meRoutes = require('./routes/me.routes');
 const mintRoutes = require('./routes/mint.routes');
@@ -27,8 +29,9 @@ app.use(cors({
 
 app.use(express.json());
 
-// ✅ Unified Auth (Registration + Login)
-app.use('/api/auth', authRoutes); // <-- already correct
+// ✅ Auth Routes
+app.use('/api/auth', authRoutes);          // Register/Login
+app.use('/api', onboardingRoutes);         // Onboarding wizard data save
 
 // ✅ Other API Routes
 app.use('/api', loginRoutes);
