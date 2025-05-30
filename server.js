@@ -30,7 +30,8 @@ const aiRoutes = require('./routes/ai.routes');             // AI content genera
 const adsRoutes = require('./routes/ads.routes');           // Ads Manager
 const nftRoutes = require('./routes/nft.routes');           // NFT Minting
 const walletRoutes = require('./routes/wallet.routes');     // Wallet Manager
-const utilityRoutes = require('./routes/utility.routes');   // ✅ Utility Services
+const utilityRoutes = require('./routes/utility.routes');   // Utility Services
+const cmsRoutes = require('./routes/cms.routes');           // ✅ Community Management
 
 // ✅ Route Bindings
 app.use('/api/auth', authRoutes);
@@ -50,7 +51,8 @@ app.use('/api', domainRoutes);
 app.use('/api/ads', adsRoutes);
 app.use('/api/nft', nftRoutes);
 app.use('/api/wallet', walletRoutes);
-app.use('/api/utility', utilityRoutes); // ✅ Utility route
+app.use('/api/utility', utilityRoutes);
+app.use('/api/cms', cmsRoutes); // ✅ CMS route
 
 // ✅ MongoDB Connection
 mongoose.connect(process.env.MONGO_URI)
