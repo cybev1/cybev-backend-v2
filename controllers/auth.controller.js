@@ -1,54 +1,50 @@
 
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const User = require("../models/user.model");
+const User = require('../models/user.model');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const sgMail = require('@sendgrid/mail');
+const crypto = require('crypto');
+
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 exports.register = async (req, res) => {
-  const { name, username, email, password, referralCode } = req.body;
+  const { name, email, password, username, referralCode } = req.body;
 
   try {
-    const existingUser = await User.findOne({ email });
-    if (existingUser) return res.status(400).json({ message: "Email already in use" });
+    const existing = await User.findOne({ email });
+    if (existing) return res.status(400).json({ message: 'Email already registered' });
 
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
+    const token = crypto.randomBytes(32).toString('hex');
+    const passwordHash = await bcrypt.hash(password, 12);
 
-    const user = new User({
+    const user = await User.create({
       name,
       username,
       email,
-      passwordHash: hashedPassword,
+      passwordHash,
       referralCode,
-      features: {
-        hasBlog: true,
-        hasTimeline: true,
-        hasNFT: true,
-        hasUtilityAccess: true
-      }
+      emailToken: token,
+      isVerified: false
     });
 
-    await user.save();
+    const msg = {
+      to: email,
+      from: 'noreply@cybev.io',
+      subject: 'Verify Your CYBEV.IO Account',
+      html: \`
+        <h3>Welcome to CYBEV.IO</h3>
+        <p>Please verify your email by clicking the link below:</p>
+        <a href="https://app.cybev.io/verify-email?token=\${token}">Verify Email</a>
+      \`,
+    };
 
-    const token = jwt.sign({ id: user._id }, "SECRET_KEY", { expiresIn: "7d" });
-    res.status(201).json({ token, user });
+    await sgMail.send(msg);
+
+    const jwtToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
+
+    res.status(201).json({ token: jwtToken, user: { id: user._id, email: user.email, isVerified: false } });
   } catch (err) {
-    res.status(500).json({ message: "Server error" });
-  }
-};
-
-exports.login = async (req, res) => {
-  const { email, password } = req.body;
-
-  try {
-    const user = await User.findOne({ email });
-    if (!user) return res.status(404).json({ message: "User not found" });
-
-    const isMatch = await bcrypt.compare(password, user.passwordHash);
-    if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
-
-    const token = jwt.sign({ id: user._id }, "SECRET_KEY", { expiresIn: "7d" });
-    res.status(200).json({ token, user });
-  } catch (err) {
-    res.status(500).json({ message: "Server error" });
+    console.error(err);
+    res.status(500).json({ message: 'Registration failed' });
   }
 };
