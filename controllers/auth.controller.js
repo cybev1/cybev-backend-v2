@@ -1,33 +1,54 @@
-const User = require('../models/user.model');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const User = require("../models/user.model");
 
 exports.register = async (req, res) => {
+  const { name, username, email, password, referralCode } = req.body;
+
   try {
-    const { username, email, password, ref } = req.body;
+    const existingUser = await User.findOne({ email });
+    if (existingUser) return res.status(400).json({ message: "Email already in use" });
 
-    const existingUser = await User.findOne({ $or: [{ email }, { username }] });
-    if (existingUser) return res.status(400).json({ message: 'Email or username already exists' });
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-    let referrerId = null;
-
-    if (ref) {
-      const refUser = await User.findOne({ username: ref });
-      if (refUser) referrerId = refUser._id;
-    }
-
-    const newUser = await User.create({
+    const user = new User({
+      name,
       username,
       email,
-      password: hashedPassword,
-      referrer: referrerId
+      passwordHash: hashedPassword,
+      referralCode,
+      features: {
+        hasBlog: true,
+        hasTimeline: true,
+        hasNFT: true,
+        hasUtilityAccess: true
+      }
     });
 
-    const token = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET || 'cybev', { expiresIn: '7d' });
+    await user.save();
 
-    res.status(201).json({ token, user: { username: newUser.username, email: newUser.email } });
+    const token = jwt.sign({ id: user._id }, "SECRET_KEY", { expiresIn: "7d" });
+    res.status(201).json({ token, user });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+exports.login = async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    const isMatch = await bcrypt.compare(password, user.passwordHash);
+    if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
+
+    const token = jwt.sign({ id: user._id }, "SECRET_KEY", { expiresIn: "7d" });
+    res.status(200).json({ token, user });
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
   }
 };
