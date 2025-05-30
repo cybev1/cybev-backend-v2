@@ -7,7 +7,7 @@ const app = express();
 
 // ✅ Middleware
 app.use(cors({
-  origin: 'https://app.cybev.io', // frontend domain
+  origin: 'https://app.cybev.io',
   credentials: true
 }));
 app.use(express.json());
@@ -15,7 +15,7 @@ app.use(express.json());
 // ✅ Route Imports
 const authRoutes = require('./routes/auth.routes'); // Register/Login
 const onboardingRoutes = require('./routes/onboarding.routes'); // Onboarding
-const meRoutes = require('./routes/me.routes'); // 🔍 Get logged-in user
+const meRoutes = require('./routes/me.routes'); // Get logged-in user
 const loginRoutes = require('./routes/login.routes'); // Legacy
 const postRoutes = require('./routes/post.routes');
 const domainRoutes = require('./routes/domain.routes');
@@ -27,11 +27,12 @@ const mintRoutes = require('./routes/mint.routes');
 const tierBadgeRoutes = require('./routes/tierbadge.routes');
 const tierHistoryRoutes = require('./routes/tierhistory.routes');
 const aiRoutes = require('./routes/ai.routes'); // AI content generation
+const adsRoutes = require('./routes/ads.routes'); // ✅ Ads Manager
 
 // ✅ Route Bindings
 app.use('/api/auth', authRoutes);             // Registration/Login
 app.use('/api', onboardingRoutes);            // Onboarding setup
-app.use('/api', meRoutes);                    // ✅ User dashboard profile
+app.use('/api', meRoutes);                    // User dashboard profile
 app.use('/api', loginRoutes);                 // Legacy auth
 app.use('/api', mintRoutes);
 app.use('/api', tierBadgeRoutes);
@@ -43,6 +44,7 @@ app.use('/api', commentRoutes);
 app.use('/api', stakeRoutes);
 app.use('/api', leaderboardRoutes);
 app.use('/api', domainRoutes);
+app.use('/api/ads', adsRoutes);               // ✅ Ads route
 
 // ✅ MongoDB Connection
 mongoose.connect(process.env.MONGO_URI)
