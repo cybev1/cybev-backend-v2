@@ -1,11 +1,13 @@
 
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const UserSchema = new mongoose.Schema({
   name: String,
   username: { type: String, unique: true },
   email: { type: String, unique: true },
   passwordHash: String,
+  isVerified: { type: Boolean, default: false },
+  emailToken: String,
   walletAddress: String,
   referredBy: String,
   referralCode: String,
