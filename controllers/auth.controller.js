@@ -2,10 +2,10 @@
 const User = require('../models/user.model');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const sgMail = require('@sendgrid/mail');
 const crypto = require('crypto');
+const { Resend } = require('resend');
 
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 exports.register = async (req, res) => {
   const { name, email, password, username, referralCode } = req.body;
@@ -27,18 +27,19 @@ exports.register = async (req, res) => {
       isVerified: false
     });
 
-    const msg = {
-      to: email,
-      from: 'noreply@cybev.io',
-      subject: 'Verify Your CYBEV.IO Account',
-      html: \`
-        <h3>Welcome to CYBEV.IO</h3>
-        <p>Please verify your email by clicking the link below:</p>
-        <a href="https://app.cybev.io/verify-email?token=\${token}">Verify Email</a>
-      \`,
-    };
+    const verifyLink = `https://app.cybev.io/verify-email?token=${token}`;
 
-    await sgMail.send(msg);
+    await resend.emails.send({
+      from: 'CYBEV.IO <onboarding@resend.dev>',
+      to: email,
+      subject: 'Verify Your Email – CYBEV.IO',
+      html: `
+        <h2>Welcome to CYBEV.IO</h2>
+        <p>Please verify your email address by clicking the link below:</p>
+        <a href="${verifyLink}" style="padding: 10px 20px; background: #3b82f6; color: white; text-decoration: none; border-radius: 4px;">Verify Email</a>
+        <p>If you did not request this, you can ignore this email.</p>
+      `
+    });
 
     const jwtToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
 
