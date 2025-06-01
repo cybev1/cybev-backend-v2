@@ -1,12 +1,11 @@
-
 const puppeteer = require('puppeteer');
 const fs = require('fs');
 const path = require('path');
 const mongoose = require('mongoose');
+const sendReportEmail = require('../utils/sendReportEmail');
 
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/cybev';
+const MONGO_URI = process.env.MONGO_URI;
 
-// Connect models
 const Member = require('../models/Member');
 const Attendance = require('../models/Attendance');
 const Giving = require('../models/Giving');
@@ -60,14 +59,18 @@ async function generateReport() {
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
   await page.setContent(html);
-  const pdfPath = path.join(__dirname, '../public/reports/weekly-report-' + Date.now() + '.pdf');
+  const fileName = 'weekly-report-' + Date.now() + '.pdf';
+  const pdfPath = path.join(__dirname, '../public/reports/', fileName);
   await page.pdf({ path: pdfPath, format: 'A4' });
 
   await browser.close();
   console.log('📄 Weekly report generated:', pdfPath);
+
+  // Send email with attachment
+  await sendReportEmail(pdfPath);
 }
 
 generateReport().catch(err => {
-  console.error('❌ Failed to generate report:', err);
+  console.error('❌ Failed to generate and email report:', err);
   process.exit(1);
 });
