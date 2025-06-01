@@ -3,6 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const mongoose = require('mongoose');
 const sendReportEmail = require('../utils/sendReportEmail');
+const { logActivity } = require('../utils/logActivity');
 
 const MONGO_URI = process.env.MONGO_URI;
 
@@ -66,11 +67,17 @@ async function generateReport() {
   await browser.close();
   console.log('📄 Weekly report generated:', pdfPath);
 
-  // Send email with attachment
   await sendReportEmail(pdfPath);
+
+  await logActivity({
+    adminId: 'system',
+    actionType: 'create',
+    module: 'report',
+    description: `Weekly report generated and emailed: ${fileName}`
+  });
 }
 
 generateReport().catch(err => {
-  console.error('❌ Failed to generate and email report:', err);
+  console.error('❌ Failed to generate/email/log report:', err);
   process.exit(1);
 });
