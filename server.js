@@ -56,12 +56,17 @@ app.use('/api/utility', utilityRoutes);
 app.use('/api/cms', cmsRoutes);
 app.use('/api', verifyRoutes); // ✅ Email verification endpoint
 
-// ✅ MongoDB Connection
+// ✅ Default route for Railway health check
+app.get('/', (_, res) => {
+  res.send('CYBEV Backend is live 🚀');
+});
+
+// ✅ MongoDB Connection and Startup
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
     console.log('MongoDB connected');
     app.listen(process.env.PORT || 5000, () => {
-      console.log('Server running');
+      console.log('Server running on port ' + (process.env.PORT || 5000));
     });
   })
   .catch(err => console.error('MongoDB connection error:', err));
