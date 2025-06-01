@@ -46,6 +46,12 @@ function generateHTML({ memberCount, attendanceCount, givingTotal, serviceCount 
   \`;
 }
 
+function updateReportIndex(reportDir) {
+  const files = fs.readdirSync(reportDir).filter(f => f.endsWith('.pdf'));
+  fs.writeFileSync(path.join(reportDir, 'index.json'), JSON.stringify(files, null, 2));
+  console.log('🗂️ Updated report index.json');
+}
+
 async function generateReport() {
   await connectDB();
 
@@ -61,14 +67,20 @@ async function generateReport() {
   const page = await browser.newPage();
   await page.setContent(html);
   const fileName = 'weekly-report-' + Date.now() + '.pdf';
-  const pdfPath = path.join(__dirname, '../public/reports/', fileName);
+  const reportDir = path.join(__dirname, '../public/reports');
+  const pdfPath = path.join(reportDir, fileName);
   await page.pdf({ path: pdfPath, format: 'A4' });
 
   await browser.close();
   console.log('📄 Weekly report generated:', pdfPath);
 
+  // Update index.json
+  updateReportIndex(reportDir);
+
+  // Send email
   await sendReportEmail(pdfPath);
 
+  // Log activity
   await logActivity({
     adminId: 'system',
     actionType: 'create',
