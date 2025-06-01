@@ -1,0 +1,14 @@
+{
+    "report_type": "Token Metrics",
+    "frequency": "weekly",
+    "delivery_method": "email",
+    "recipient_emails": [
+        "info@cybev.io",
+        "udezedike@gmail.com"
+    ],
+    "report_name": "CYBEV_Token_Metrics_Report",
+    "include_charts": true,
+    "include_data_table": true,
+    "pdf_path": "/mnt/data/CYBEV_Token_Metrics_Report.pdf",
+    "status": "enabled"
+}
