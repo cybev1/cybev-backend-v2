@@ -1,3 +1,4 @@
+
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
@@ -33,6 +34,7 @@ const walletRoutes = require('./routes/wallet.routes');
 const utilityRoutes = require('./routes/utility.routes');   
 const cmsRoutes = require('./routes/cms.routes');           
 const verifyRoutes = require('./routes/verify.routes');      // ✅ Email Verification
+const reportRoutes = require('./routes/report.routes');      // ✅ Token Metrics Reports
 
 // ✅ Route Bindings
 app.use('/api/auth', authRoutes);
@@ -55,6 +57,7 @@ app.use('/api/wallet', walletRoutes);
 app.use('/api/utility', utilityRoutes);
 app.use('/api/cms', cmsRoutes);
 app.use('/api', verifyRoutes); // ✅ Email verification endpoint
+app.use('/api/reports', reportRoutes); // ✅ Token Metrics Reports
 
 // ✅ Default route for Railway health check
 app.get('/', (_, res) => {
