@@ -1,9 +1,11 @@
+
 {
   "name": "cybev-backend",
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "weekly:report": "node scripts/weeklyReports/generateTokenMetrics.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -12,6 +14,8 @@
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^7.2.2",
     "cors": "^2.8.5",
-    "openai": "^4.20.0"
+    "openai": "^4.20.0",
+    "puppeteer": "^21.3.8",
+    "nodemailer": "^6.9.10"
   }
 }
