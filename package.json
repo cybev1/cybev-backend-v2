@@ -5,7 +5,9 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "weekly:report": "node scripts/weeklyReports/generateTokenMetrics.js"
+    "weekly:report": "node scripts/weeklyReports/generateTokenMetrics.js",
+    "weekly:cms": "node scripts/weeklyReports/generateCMSSummary.js",
+    "weekly:utility": "node scripts/weeklyReports/generateUtilitySummary.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
