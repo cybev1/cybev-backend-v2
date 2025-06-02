@@ -67,7 +67,12 @@ app.use('/api/reports/cms-summary', cmsSummaryRoutes); // ✅ CMS Summary Report
 app.use('/api/reports/utility-summary', utilitySummaryRoutes); // ✅ Utility Summary Reports
 app.use('/api/reports/ads-summary', adsSummaryRoutes); // ✅ Ads Summary Reports
 
-// ✅ Default route for Railway health check
+// ✅ Health route for Railway container check
+app.get('/health', (_, res) => {
+  res.status(200).send('OK');
+});
+
+// ✅ Default route for manual check
 app.get('/', (_, res) => {
   res.send('CYBEV Backend is live 🚀');
 });
