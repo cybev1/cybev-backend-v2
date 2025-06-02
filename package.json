@@ -1,24 +1,16 @@
 
 {
-  "name": "cybev-backend",
+  "name": "cybev-frontend",
   "version": "1.0.0",
-  "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "weekly:report": "node scripts/weeklyReports/generateTokenMetrics.js",
-    "weekly:cms": "node scripts/weeklyReports/generateCMSSummary.js",
-    "weekly:utility": "node scripts/weeklyReports/generateUtilitySummary.js",
-    "weekly:ads": "node scripts/weeklyReports/generateAdsSummary.js"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
   },
   "dependencies": {
-    "bcryptjs": "^2.4.3",
-    "dotenv": "^16.0.3",
-    "express": "^4.18.2",
-    "jsonwebtoken": "^9.0.0",
-    "mongoose": "^7.2.2",
-    "cors": "^2.8.5",
-    "openai": "^4.20.0",
-    "puppeteer": "^21.3.8",
-    "nodemailer": "^6.9.10"
+    "next": "13.4.12",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "recharts": "^2.6.2"
   }
 }
