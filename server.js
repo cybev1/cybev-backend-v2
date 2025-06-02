@@ -38,6 +38,7 @@ const reportRoutes = require('./routes/report.routes');      // ✅ Token Metric
 const aiSummaryRoutes = require('./routes/aiSummary.routes'); // ✅ AI Summary Reports
 const cmsSummaryRoutes = require('./routes/cmsSummary.routes'); // ✅ CMS Summary Reports
 const utilitySummaryRoutes = require('./routes/utilitySummary.routes'); // ✅ Utility Summary Reports
+const adsSummaryRoutes = require('./routes/adsSummary.routes'); // ✅ Ads Summary Reports
 
 // ✅ Route Bindings
 app.use('/api/auth', authRoutes);
@@ -64,6 +65,7 @@ app.use('/api/reports', reportRoutes); // ✅ Token Metrics Reports
 app.use('/api/reports/ai-summary', aiSummaryRoutes); // ✅ AI Summary Reports
 app.use('/api/reports/cms-summary', cmsSummaryRoutes); // ✅ CMS Summary Reports
 app.use('/api/reports/utility-summary', utilitySummaryRoutes); // ✅ Utility Summary Reports
+app.use('/api/reports/ads-summary', adsSummaryRoutes); // ✅ Ads Summary Reports
 
 // ✅ Default route for Railway health check
 app.get('/', (_, res) => {
