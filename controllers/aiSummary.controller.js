@@ -4,7 +4,7 @@ const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 exports.generateAISummary = async (req, res) => {
   try {
-    const prompt = \`
+    const prompt = `
 Based on recent data, generate a concise summary:
 - Token price has fluctuated slightly.
 - Market cap shows moderate stability.
@@ -14,7 +14,7 @@ Based on recent data, generate a concise summary:
 
 Format:
 "This week on CYBEV..."
-\`;
+`;
 
     const chatCompletion = await openai.chat.completions.create({
       model: 'gpt-4',
